@@ -1,0 +1,240 @@
+FROM nvcr.io/nvidia/pytorch:23.08-py3
+
+LABEL org.opencontainers.image.title="findvp CuRobo v1 environment" \
+      org.opencontainers.image.source="https://github.com/NVlabs/curobo" \
+      org.opencontainers.image.version="0.7.8"
+
+ARG CUROBO_TAG=v0.7.8
+ARG CUROBO_COMMIT=d64c4b005459db10c5dd867d8b30a87d5bda9bdb
+ARG MAX_JOBS=4
+ARG NUMPY_VERSION=1.24.4
+ARG NUMPY_QUATERNION_VERSION=2023.0.4
+ARG SETUPTOOLS_SCM_VERSION=10.2.1
+ARG WARP_VERSION=1.5.1
+
+USER root
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    MAX_JOBS=${MAX_JOBS} \
+    NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics,display \
+    NVIDIA_VISIBLE_DEVICES=all \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONUNBUFFERED=1 \
+    TORCH_CUDA_ARCH_LIST=8.6+PTX
+
+# CUDA, PyTorch, nvcc, and Python 3.10 come from NVIDIA's official image.
+# These are only the build tools and shared libraries needed by CuRobo and
+# this repository's headless and X11 PyBullet pipelines.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    ca-certificates \
+    git \
+    git-lfs \
+    libgl1 \
+    libglib2.0-0 \
+    libx11-6 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxext6 \
+    libxi6 \
+    libxinerama1 \
+    libxrandr2 \
+    libxrender1 \
+    mesa-utils \
+    ninja-build \
+    python3-dev \
+    python3-tk \
+    x11-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# NGC 23.08 pins numba to NumPy <1.25. Newer numpy-quaternion releases
+# require NumPy >=1.25, so keep the newest mutually compatible pair explicit.
+RUN python3 -m pip install \
+        "setuptools-scm==${SETUPTOOLS_SCM_VERSION}" \
+        "numpy==${NUMPY_VERSION}" \
+        "numpy-quaternion==${NUMPY_QUATERNION_VERSION}" \
+        "warp-lang==${WARP_VERSION}"
+
+# Keep the pinned source and its non-commercial NVIDIA license in the image.
+RUN git lfs install --system && \
+    git clone --depth 1 --branch "${CUROBO_TAG}" \
+        https://github.com/NVlabs/curobo.git /opt/curobo && \
+    test "$(git -C /opt/curobo rev-parse HEAD)" = "${CUROBO_COMMIT}"
+
+# setuptools-scm must exist before pip prepares v0.7.8 metadata. Stamp the
+# verified source tag explicitly so the installed distribution is not 0.0.0.
+RUN SETUPTOOLS_SCM_PRETEND_VERSION="${CUROBO_TAG#v}" \
+        python3 -m pip install --no-build-isolation /opt/curobo && \
+    python3 -c "import importlib.metadata as m; assert m.version('nvidia-curobo') == '0.7.8'"
+
+COPY requirements-dinov3.txt /tmp/requirements-dinov3.txt
+
+# requirements-dinov3.txt deliberately excludes PyTorch so pip preserves the
+# CUDA 12.2 build supplied by the NGC base image and required by CuRobo.
+RUN python3 -m pip install \
+        pybullet \
+        -r /tmp/requirements-dinov3.txt && \
+    python3 -m pip check
+
+# This small, weight-free forward pass catches API incompatibilities during the
+# image build without requiring Hugging Face credentials or model downloads.
+RUN python3 - <<'PY'
+import timm
+import torch
+from transformers import pipeline  # noqa: F401
+from skimage.feature import SIFT  # noqa: F401
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+model = timm.create_model(
+    "vit_small_patch16_dinov3.lvd1689m",
+    pretrained=False,
+    img_size=32,
+    dynamic_img_size=True,
+    num_classes=0,
+)
+model.eval()
+with torch.inference_mode():
+    output = model.forward_features(torch.zeros(1, 3, 32, 32))
+assert output.shape == (1, 9, 384), output.shape
+patch_features = output[0, 5:].float().numpy()
+reduced = PCA(n_components=2, svd_solver="full").fit_transform(patch_features)
+labels = KMeans(n_clusters=2, n_init=2, random_state=0).fit_predict(reduced)
+assert labels.shape == (4,), labels.shape
+print("DINOv3 timm smoke test passed with", torch.__version__)
+PY
+
+# Run this after starting the image with --gpus all. It intentionally fails on
+# missing GPU passthrough or any mismatch with the pinned R535/CUDA 12.2 stack.
+RUN cat <<'EOF' > /usr/local/bin/check_env
+#!/usr/bin/env bash
+set -euo pipefail
+
+python3 -m pip check
+
+python3 - <<'PY'
+from importlib.metadata import version
+import re
+import subprocess
+
+import pybullet  # noqa: F401
+import timm
+import torch
+import transformers
+from PIL import Image  # noqa: F401
+from curobo.types.base import TensorDeviceType  # noqa: F401
+from curobo.types.math import Pose  # noqa: F401
+from curobo.wrap.reacher.ik_solver import IKSolver, IKSolverConfig  # noqa: F401
+
+
+def triplet(value: str) -> tuple[int, int, int]:
+    match = re.search(r"(\d+)\.(\d+)(?:\.(\d+))?", value)
+    if match is None:
+        raise RuntimeError(f"Cannot parse version: {value!r}")
+    return tuple(int(component or 0) for component in match.groups())
+
+
+curobo_version = version("nvidia-curobo")
+if curobo_version != "0.7.8":
+    raise RuntimeError(f"Expected nvidia-curobo 0.7.8, found {curobo_version}")
+
+numpy_version = version("numpy")
+if numpy_version != "1.24.4":
+    raise RuntimeError(f"Expected numpy 1.24.4, found {numpy_version}")
+
+quaternion_version = version("numpy-quaternion")
+if quaternion_version != "2023.0.4":
+    raise RuntimeError(
+        "Expected numpy-quaternion 2023.0.4, found " + quaternion_version
+    )
+
+warp_version = version("warp-lang")
+if warp_version != "1.5.1":
+    raise RuntimeError(
+        "Expected warp-lang 1.5.1 for CuRobo v0.7.8 MotionGen, found "
+        + warp_version
+    )
+
+timm_version = version("timm")
+if timm_version != "1.0.20":
+    raise RuntimeError(
+        "Expected timm 1.0.20 for DINOv3, found " + timm_version
+    )
+
+transformers_version = version("transformers")
+if transformers_version != "4.44.2":
+    raise RuntimeError(
+        "Expected transformers 4.44.2 for automatic SAM masks, found "
+        + transformers_version
+    )
+
+sklearn_version = version("scikit-learn")
+if triplet(sklearn_version) < (1, 5, 1):
+    raise RuntimeError(
+        "Expected scikit-learn >=1.5.1 for spatial clustering, found "
+        + sklearn_version
+    )
+
+skimage_version = version("scikit-image")
+if triplet(skimage_version) < (0, 24, 0):
+    raise RuntimeError(
+        "Expected scikit-image >=0.24.0 for SIFT ranking, found "
+        + skimage_version
+    )
+
+torch_cuda = str(torch.version.cuda or "")
+if triplet(torch_cuda)[:2] != (12, 2):
+    raise RuntimeError(f"Expected a PyTorch CUDA 12.2 build, found {torch_cuda!r}")
+
+driver = subprocess.run(
+    ["nvidia-smi", "--query-gpu=driver_version", "--format=csv,noheader"],
+    check=True,
+    capture_output=True,
+    text=True,
+).stdout.splitlines()[0].strip()
+if triplet(driver) < (535, 54, 3):
+    raise RuntimeError(f"NVIDIA driver {driver} is older than 535.54.03")
+
+if not torch.cuda.is_available():
+    raise RuntimeError("PyTorch cannot access CUDA; start the container with --gpus all")
+
+device = torch.cuda.get_device_properties(0)
+capability = (int(device.major), int(device.minor))
+if capability < (8, 6):
+    raise RuntimeError(
+        f"Image was compiled for compute capability 8.6+; device reports {capability}"
+    )
+if int(device.total_memory) < 4 * 1024**3:
+    raise RuntimeError("CuRobo requires at least 4 GiB of GPU memory")
+
+# Force one real driver/runtime operation in addition to import checks.
+torch.ones(1, device="cuda:0").square_()
+torch.cuda.synchronize(device=0)
+
+print(f"nvidia-curobo: {curobo_version}")
+print(f"NumPy:         {numpy_version}")
+print(f"quaternion:    {quaternion_version}")
+print(f"Warp:          {warp_version}")
+print(f"timm:          {timm_version}")
+print(f"transformers:  {transformers_version}")
+print(f"scikit-learn: {sklearn_version}")
+print(f"scikit-image: {skimage_version}")
+print(f"PyTorch:       {torch.__version__}")
+print(f"CUDA runtime:  {torch_cuda}")
+print(f"NVIDIA driver: {driver}")
+print(f"GPU:           {device.name}")
+print(f"Compute:       {device.major}.{device.minor}")
+print(f"VRAM GiB:      {device.total_memory / 1024**3:.2f}")
+print("CuRobo v1 environment check passed.")
+PY
+EOF
+
+RUN chmod 0755 /usr/local/bin/check_env
+
+WORKDIR /workspace
+
+ENTRYPOINT ["/bin/bash"]
+CMD ["-l"]

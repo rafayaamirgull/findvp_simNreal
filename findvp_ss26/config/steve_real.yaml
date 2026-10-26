@@ -1,0 +1,28 @@
+# Steve's live interfaces, verified on ROS_DOMAIN_ID=74 on 2026-09-21.
+# The calibrated alias is intentional: the RealSense driver's optical frame is
+# currently in a disconnected TF tree. findvp_capture associates image pixels
+# with this calibrated optical alias at the image timestamp.
+planning_frame: ur5ebase_link
+tool_frame: ur5etool0
+camera_frame: d415_calib_color_optical_frame_handeye
+image_frame: d415_calib_color_optical_frame
+odom_topic: /odom
+move_group: ur_manipulator
+
+joint_names:
+  - ur5eshoulder_pan_joint
+  - ur5eshoulder_lift_joint
+  - ur5eelbow_joint
+  - ur5ewrist_1_joint
+  - ur5ewrist_2_joint
+  - ur5ewrist_3_joint
+
+image_topic: /d415_calib/d415_calib/color/image_raw
+camera_info_topic: /d415_calib/d415_calib/color/camera_info
+joint_states_topic: /joint_states
+move_action: /move_action
+controller_name: scaled_joint_trajectory_controller
+
+tool_from_camera:
+  translation_m: [0.034826821173538705, -0.003987870576912486, 0.06553079550290158]
+  quaternion_xyzw: [-0.0016603548825387345, 0.007722474161035939, 0.9994203728998347, 0.03311381656124291]

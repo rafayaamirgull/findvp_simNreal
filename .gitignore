@@ -1,0 +1,14 @@
+/build/
+/install/
+/log/
+
+# Local development environment and generated robot-run data (kept on disk)
+/.venv-findvp/
+/build_backups/
+/findvp_runs/
+/targets/
+/steve-real-robot-nbv/
+/.pytest_cache/
+/.vscode/
+**/__pycache__/
+*.pyc

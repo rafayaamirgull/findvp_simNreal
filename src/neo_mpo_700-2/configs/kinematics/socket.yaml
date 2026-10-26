@@ -1,0 +1,83 @@
+/**:
+  ros__parameters:
+    num_wheels: 4
+    control_rate: 100.0
+    request_status_divider: 10
+    heartbeat_divider: 10
+    steer_gain: 10.0
+    steer_lookahead: 0.06
+    steer_low_pass: 0.5
+    max_steer_vel: 8.0
+    motor_delay: 0.0
+    can_iface: can0
+    motor_timeout: 0.2
+    trajectory_timeout: 0.1
+    home_vel: -1.0
+    drive_low_pass: 0.5
+    auto_home: true
+    motor_group_id: 30
+    measure_torque: false
+
+    drive0:
+      can_id: 2
+      joint_name: wheel_front_left_joint
+      rot_sign: -1
+      gear_ratio: 30
+      enc_ticks_per_rev: 10000
+    steer0:
+      can_id: 1
+      joint_name: caster_front_left_joint
+      rot_sign: 1
+      gear_ratio: 19
+      enc_ticks_per_rev: 10000
+      home_angle: 180.0
+      home_dig_in: 9
+      enc_home_offset: 4663
+
+    drive1:
+      can_id: 4
+      joint_name: wheel_back_left_joint
+      rot_sign: 1
+      gear_ratio: 30
+      enc_ticks_per_rev: 10000
+    steer1:
+      can_id: 3
+      joint_name: caster_back_left_joint
+      rot_sign: -1
+      gear_ratio: 19
+      enc_ticks_per_rev: 10000
+      home_angle: 180.0
+      home_dig_in: 9
+      enc_home_offset: -5429
+
+    drive2:
+      can_id: 6
+      joint_name: wheel_back_right_joint
+      rot_sign: -1
+      gear_ratio: 30
+      enc_ticks_per_rev: 10000
+    steer2:
+      can_id: 5
+      joint_name: caster_back_right_joint
+      rot_sign: 1
+      gear_ratio: 19
+      enc_ticks_per_rev: 10000
+      home_angle: 0.0
+      home_dig_in: 9
+      enc_home_offset: 4845
+
+    drive3:
+      can_id: 8
+      joint_name: wheel_front_right_joint
+      rot_sign: 1
+      gear_ratio: 30
+      enc_ticks_per_rev: 10000
+    steer3:
+      can_id: 7
+      joint_name: caster_front_right_joint
+      rot_sign: -1
+      gear_ratio: 19
+      enc_ticks_per_rev: 10000
+      home_angle: 0.0
+      home_dig_in: 9
+      enc_home_offset: -5363

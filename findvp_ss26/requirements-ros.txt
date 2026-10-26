@@ -1,0 +1,12 @@
+# ROS Humble's apt-built numerical extensions use the NumPy 1.x ABI.
+# Install torch + matching torchvision separately (CPU or approved CUDA wheels).
+# Recent setuptools passes strip_trailing_zero to packaging.  Humble's
+# system-site-packages may otherwise expose an older, incompatible packaging.
+packaging>=22
+setuptools>=65,<80
+-r requirements-dinov3.txt
+numpy>=1.24,<2
+opencv-python-headless>=4.8,<4.12
+PyYAML>=6
+# Humble's launch_testing plugin still uses pytest's pre-9 collection hooks.
+pytest>=7,<9

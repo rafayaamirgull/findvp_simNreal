@@ -1,0 +1,22 @@
+schema_version: 1
+name: box_table_start
+joint_positions_rad:
+  ur5eshoulder_pan_joint: -3.0142605940448206
+  ur5eshoulder_lift_joint: -1.5491658852300425
+  ur5eelbow_joint: -1.861761212348938
+  ur5ewrist_1_joint: -1.8241006336607875
+  ur5ewrist_2_joint: 2.24501895904541
+  ur5ewrist_3_joint: 1.0701706409454346
+recorded_camera_pose:
+  planning_frame: ur5ebase_link
+  camera_frame: d415_calib_color_optical_frame_handeye
+  translation_m:
+  - 0.36266560058809577
+  - 6.142590301285651e-05
+  - 0.32483911772543983
+  quaternion_xyzw:
+  - 0.8838460209696736
+  - 0.2277783042061416
+  - -0.16838503545540934
+  - -0.3722629919609662
+joint_state_stamp_ns: 1790214805045895342

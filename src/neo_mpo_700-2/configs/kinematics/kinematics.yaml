@@ -1,0 +1,43 @@
+/**:
+  ros__parameters:
+    num_wheels: 4
+    control_rate: 100.0
+    wheel_radius: 0.090
+    wheel_lever_arm: 0.045
+    zero_vel_threshold: 0.001
+    small_vel_threshold: 0.02
+    steer_hysteresis: 30.0
+    broadcast_tf: true
+    cmd_timeout: 0.2
+
+    drive0:
+      joint_name: wheel_front_left_joint
+    steer0:
+      joint_name: caster_front_left_joint
+      center_pos_x: 0.240
+      center_pos_y: 0.190
+      home_angle: 180.0
+
+    drive1:
+      joint_name: wheel_back_left_joint
+    steer1:
+      joint_name: caster_back_left_joint
+      center_pos_x: -0.240
+      center_pos_y: 0.190
+      home_angle: 180.0
+
+    drive2:
+      joint_name: wheel_back_right_joint
+    steer2:
+      joint_name: caster_back_right_joint
+      center_pos_x: -0.240
+      center_pos_y: -0.190
+      home_angle: 0.0
+
+    drive3:
+      joint_name: wheel_front_right_joint
+    steer3:
+      joint_name: caster_front_right_joint
+      center_pos_x: 0.240
+      center_pos_y: -0.190
+      home_angle: 0.0

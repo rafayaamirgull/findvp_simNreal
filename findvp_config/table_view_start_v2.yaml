@@ -1,0 +1,22 @@
+schema_version: 1
+name: table_view_start_v2
+joint_positions_rad:
+  ur5eshoulder_pan_joint: -3.249756399785177
+  ur5eshoulder_lift_joint: -1.2980876427939911
+  ur5eelbow_joint: -1.775089144706726
+  ur5ewrist_1_joint: -2.255643983880514
+  ur5ewrist_2_joint: 2.1391549110412598
+  ur5ewrist_3_joint: 0.8007224202156067
+recorded_camera_pose:
+  planning_frame: ur5ebase_link
+  camera_frame: d415_calib_color_optical_frame_handeye
+  translation_m:
+  - 0.242400427473928
+  - -0.09396736205592715
+  - 0.4283531978036118
+  quaternion_xyzw:
+  - 0.8823772786020794
+  - 0.2444532589127143
+  - -0.1380010608033085
+  - -0.3776356042945415
+joint_state_stamp_ns: 1790108916380150087

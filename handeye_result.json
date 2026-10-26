@@ -1,0 +1,28 @@
+{
+  "method": "TSAI",
+  "translation_m": [
+    0.034826821173538705,
+    -0.003987870576912486,
+    0.06553079550290158
+  ],
+  "quaternion_xyzw": [
+    -0.0016603548825387345,
+    0.007722474161035939,
+    0.9994203728998347,
+    0.03311381656124291
+  ],
+  "note": "T_gripper_camera: camera pose expressed in ur5etool0 frame",
+  "n_samples": 17,
+  "cross_method_max_translation_spread_mm": 3.299329812824511,
+  "cross_method_max_rotation_spread_deg": 2.2759850573164813,
+  "validation_position_spread_mm": {
+    "min": 1.002451760153414,
+    "max": 7.603063726906831,
+    "mean": 3.9162694330551773
+  },
+  "validation_rotation_spread_deg": {
+    "min": 0.16302307437135766,
+    "max": 1.5856735037309813,
+    "mean": 0.8018091878645424
+  }
+}

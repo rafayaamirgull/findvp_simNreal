@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+    <name>neo_kinematics_omnidrive2</name>
+    <version>1.0.0</version>
+    <description>
+		Omni-directional kinematics and motor controller interface.
+    </description>
+    <author>Max Wittal</author>
+    <author>wittal@neobotix.de</author>
+    <maintainer email="ros@neobotix.de">Neobotix GmbH</maintainer>
+    <maintainer email="wittal@neobotix.de">Max Wittal</maintainer>
+    <maintainer email="padmanabhan@neobotix.de">Max Wittal</maintainer>
+
+    <license>BSD</license>
+
+    <buildtool_depend>ament_cmake</buildtool_depend>
+
+    <depend>rclcpp</depend>
+    <depend>std_msgs</depend>
+    <depend>geometry_msgs</depend>
+    <depend>nav_msgs</depend>
+    <depend>sensor_msgs</depend>
+    <depend>trajectory_msgs</depend>
+    <depend>tf2_ros</depend>
+    <depend>tf2_geometry_msgs</depend>
+    <depend>neo_srvs2</depend>
+    <depend>neo_msgs2</depend>
+    <depend>neo_common2</depend>
+    <depend>angles</depend>
+
+    <export>
+     <build_type>ament_cmake</build_type>
+    </export>
+
+</package>
+
+

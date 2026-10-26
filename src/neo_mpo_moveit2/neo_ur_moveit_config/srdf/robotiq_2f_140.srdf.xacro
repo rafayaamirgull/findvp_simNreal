@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="2f_140">
+
+  <xacro:arg name="prefix" default=""/>
+  <xacro:property name="prefix_value" value="$(arg prefix)"/>
+
+  <xacro:macro name="robotiq_2f_140">
+
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="left_inner_finger" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="right_outer_knuckle" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="robotiq_140_base_link" link2="ur_to_robotiq_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix_value}wrist_2_link" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="${prefix_value}wrist_3_link" link2="ur_to_robotiq_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix_value}wrist_1_link" link2="ur_to_robotiq_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="left_inner_finger_pad" reason="Adjacent"/>
+    <disable_collisions link1="left_inner_finger" link2="left_inner_knuckle" reason="Default"/>
+    <disable_collisions link1="left_inner_finger" link2="left_outer_finger" reason="Adjacent"/>
+    <disable_collisions link1="left_inner_finger" link2="left_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="left_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="left_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="left_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_inner_finger_pad" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="left_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="left_outer_knuckle" reason="Default"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="left_inner_knuckle" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_inner_knuckle" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="left_outer_knuckle" reason="Adjacent"/>
+    <disable_collisions link1="left_outer_finger" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_outer_finger" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_inner_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_inner_finger_pad" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="left_outer_knuckle" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="left_outer_knuckle" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="right_inner_finger_pad" reason="Adjacent"/>
+    <disable_collisions link1="right_inner_finger" link2="right_inner_knuckle" reason="Default"/>
+    <disable_collisions link1="right_inner_finger" link2="right_outer_finger" reason="Adjacent"/>
+    <disable_collisions link1="right_inner_finger" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="right_inner_knuckle" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_inner_finger_pad" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="right_outer_finger" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="right_outer_knuckle" reason="Default"/>
+    <disable_collisions link1="right_inner_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="right_inner_knuckle" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_inner_knuckle" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="right_outer_knuckle" reason="Adjacent"/>
+    <disable_collisions link1="right_outer_finger" link2="robotiq_140_base_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_outer_finger" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="right_outer_knuckle" link2="robotiq_140_base_link" reason="Adjacent"/>
+    <disable_collisions link1="right_outer_knuckle" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="right_outer_knuckle" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="right_outer_knuckle" link2="${prefix_value}wrist_3_link" reason="Never"/>
+    <disable_collisions link1="robotiq_140_base_link" link2="${prefix_value}wrist_1_link" reason="Never"/>
+    <disable_collisions link1="robotiq_140_base_link" link2="${prefix_value}wrist_2_link" reason="Never"/>
+    <disable_collisions link1="robotiq_140_base_link" link2="${prefix_value}wrist_3_link" reason="Adjacent"/>
+  </xacro:macro>
+
+</robot>

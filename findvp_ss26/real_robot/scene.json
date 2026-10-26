@@ -1,0 +1,98 @@
+{
+  "frame": "ur5ebase_link",
+  "note": "Everything is in the arm's own base frame ur5ebase_link: +y = Steve's forward direction, +x = Steve's right, +z = up, deck top at z = 0. The object and 'box_in_front' values are the friend's archived measurements from 2026-09-21. Check them with 'steve_three_view.py check' (projected outline must sit on the real carton) before any motion. quat_wxyz is CuRobo order.",
+  "object": {
+    "name": "carton",
+    "center_xyz_m": [
+      0.1812,
+      0.2871,
+      0.0635
+    ],
+    "yaw_deg": -86.05,
+    "dims_xyz_m": [
+      0.031,
+      0.09,
+      0.127
+    ],
+    "collision_margin_m": 0.02,
+    "mask_margin_m": 0.005
+  },
+  "obstacles": [
+    {
+      "name": "deck",
+      "description": "Friend's deck/table proxy: 0.5 x 0.5 m, arm centred in x, arm base 11 cm from the back edge, top flush with the arm base (tested at zero margin by the friend).",
+      "center_xyz_m": [
+        0.0,
+        0.14,
+        -0.5
+      ],
+      "dims_xyz_m": [
+        0.5,
+        0.5,
+        1.0
+      ],
+      "quat_wxyz": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "margin_m": 0.0
+    },
+    {
+      "name": "box_in_front",
+      "description": "Friend's hand-measured box in front of the arm base (8 x 20 x 8 cm). Delete this entry if that box is not on the deck.",
+      "center_xyz_m": [
+        0.0,
+        0.34,
+        0.04
+      ],
+      "dims_xyz_m": [
+        0.08,
+        0.2,
+        0.08
+      ],
+      "quat_wxyz": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "margin_m": 0.01
+    }
+  ],
+  "camera_collision_spheres_tool0": [
+    {
+      "center": [
+        -0.015,
+        -0.004,
+        0.055
+      ],
+      "radius": 0.035
+    },
+    {
+      "center": [
+        0.035,
+        -0.004,
+        0.055
+      ],
+      "radius": 0.035
+    },
+    {
+      "center": [
+        0.085,
+        -0.004,
+        0.055
+      ],
+      "radius": 0.035
+    }
+  ],
+  "search": {
+    "radius_m": 0.4,
+    "fallback_radii_m": [
+      0.45,
+      0.5
+    ],
+    "azimuth_offset_deg": 0.0
+  }
+}
